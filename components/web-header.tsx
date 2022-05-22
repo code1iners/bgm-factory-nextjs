@@ -5,6 +5,10 @@ interface WebHeaderProps {
 }
 
 const WebHeader = ({ className }: WebHeaderProps) => {
+  const onMenuClick = () => {
+    alert("서비스 준비중입니다.");
+  };
+
   return (
     <header
       className={clazz(
@@ -19,7 +23,7 @@ const WebHeader = ({ className }: WebHeaderProps) => {
 
       {/* Menu icon */}
       <div className="col-start-12 col-end-13 justify-self-center hover:text-red-500 transition-colors">
-        <button className="cursor-pointer">
+        <button className="cursor-pointer" onClick={onMenuClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
