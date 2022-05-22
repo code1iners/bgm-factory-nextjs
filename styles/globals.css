@@ -6,4 +6,8 @@
   .bgm-category-box {
     @apply bg-sexy-gray py-16 px-24 rounded-md cursor-pointer transition hover:scale-105 shadow-md text-2xl text-center tracking-wider bg-gradient-to-r from-[#D3CCE3] to-[#E9E4F0] hover:from-[#E9E4F0] hover:to-[#D3CCE3];
   }
+
+  .responsive-grid {
+    @apply sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
 }
