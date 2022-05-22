@@ -8,13 +8,13 @@ const WebHeader = ({ className }: WebHeaderProps) => {
   return (
     <header
       className={clazz(
-        "fixed top-0 left-0 w-full h-[70px] grid grid-cols-12 items-center border-b border-gray-300",
+        "fixed top-0 left-0 w-full h-[70px] flex justify-between px-5 items-center border-b border-gray-300",
         className ? className : ""
       )}
     >
       {/* Logo */}
-      <span className="tracking-widest text-2xl col-start-1 col-end-3 justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110">
-        BGM
+      <span className="tracking-widest text-xl col-start-1 col-end-3 whitespace-nowrap justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110">
+        BF
       </span>
 
       {/* Menu icon */}
