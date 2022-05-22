@@ -13,7 +13,7 @@ const WebHeader = ({ className }: WebHeaderProps) => {
       )}
     >
       {/* Logo */}
-      <span className="tracking-widest text-2xl col-start-1 col-end-3 justify-self-center cursor-pointer transition-colors hover:text-red-500 hover:scale-110">
+      <span className="tracking-widest text-2xl col-start-1 col-end-3 justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110">
         zzZ
       </span>
 
