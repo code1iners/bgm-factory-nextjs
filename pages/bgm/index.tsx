@@ -17,7 +17,7 @@ const BgmIndex = () => {
     <WebLayout>
       {data ? (
         <ul className="p-10 grid gap-10 responsive-grid">
-          {data.videos.map((videoId, index) => (
+          {data?.videos?.map((videoId, index) => (
             <li className="" key={videoId}>
               <iframe
                 className="w-full aspect-video"
@@ -33,7 +33,9 @@ const BgmIndex = () => {
           ))}
         </ul>
       ) : (
-        "no"
+        <div className="p-10 flex justify-center">
+          <h1 className="text-2xl tracking-wider">No data</h1>
+        </div>
       )}
     </WebLayout>
   );
