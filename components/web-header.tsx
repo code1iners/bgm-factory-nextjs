@@ -1,4 +1,5 @@
 import { clazz } from "libs/clients/clazz";
+import Link from "next/link";
 
 interface WebHeaderProps {
   className?: string;
@@ -17,9 +18,13 @@ const WebHeader = ({ className }: WebHeaderProps) => {
       )}
     >
       {/* Logo */}
-      <span className="tracking-widest text-xl col-start-1 col-end-3 whitespace-nowrap justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110">
-        BGM Factory
-      </span>
+      <Link href="/">
+        <a>
+          <span className="tracking-widest text-xl col-start-1 col-end-3 whitespace-nowrap justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110">
+            BGM Factory
+          </span>
+        </a>
+      </Link>
 
       {/* Menu icon */}
       <div className="col-start-12 col-end-13 justify-self-center hover:text-red-500 transition-colors">
