@@ -1,4 +1,5 @@
 import React from "react";
+import WebHeader from "@/components/web-header";
 
 interface WebLayoutProps {
   children: React.ReactNode;
@@ -6,9 +7,10 @@ interface WebLayoutProps {
 
 const WebLayout = ({ children }: WebLayoutProps) => {
   return (
-    <>
-      <main>{children}</main>
-    </>
+    <div className="h-screen relative">
+      <WebHeader />
+      <main className="relative top-[70px]">body{children}</main>
+    </div>
   );
 };
 
