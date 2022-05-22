@@ -5,7 +5,11 @@ interface WebLayoutProps {
 }
 
 const WebLayout = ({ children }: WebLayoutProps) => {
-  return <main>{children}</main>;
+  return (
+    <>
+      <main>{children}</main>
+    </>
+  );
 };
 
 export default WebLayout;
