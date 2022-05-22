@@ -16,7 +16,7 @@ const BgmIndex = () => {
   return (
     <WebLayout>
       {data ? (
-        <ul className="p-10 grid gap-10 responsive-grid">
+        <ul className="p-10 grid gap-10 responsive-grid overflow-y-scroll h-full">
           {data?.videos?.map((videoId, index) => (
             <li className="" key={videoId}>
               <iframe
