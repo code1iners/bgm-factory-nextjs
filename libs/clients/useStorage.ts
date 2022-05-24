@@ -45,8 +45,11 @@ const useStorage = () => {
 
   const addCategory = (name: string) => {
     const categories = getCategories();
+    const isExist = categories.some((c) => c.name === name);
+    if (isExist) return false;
     categories.push({ name: name.toLowerCase(), videos: [] });
     setCategories(categories);
+    return true;
   };
 
   const extractVideoId = (videoUrl: string) => {

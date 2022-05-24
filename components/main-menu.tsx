@@ -42,14 +42,21 @@ const MainMenu = () => {
   const onFormValid = ({ input }: MenuAddForm) => {
     switch (currentInputMode) {
       case "CATEGORY":
-        addCategory(input);
-        setValue("input", "");
+        const addCategoryOk = addCategory(input);
+        if (addCategoryOk) {
+          alert("정상적으로 추가했습니다.");
+          setValue("input", "");
+        } else {
+          alert(
+            "카테고리를 추가하는데 실패했습니다.\n이미 존재하는 카테고리가 아닌지 확인해주세요."
+          );
+        }
         break;
 
       case "VIDEO":
         if (!selectedCategoryName) break;
-        const ok = addVideo(selectedCategoryName, input);
-        if (ok) {
+        const addVideoOk = addVideo(selectedCategoryName, input);
+        if (addVideoOk) {
           alert("정상적으로 추가되었습니다.");
           setValue("input", "");
         } else {
