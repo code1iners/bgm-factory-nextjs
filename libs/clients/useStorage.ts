@@ -39,7 +39,7 @@ const useStorage = () => {
 
   const addCategory = (name: string) => {
     const categories = getCategories();
-    categories.push({ name, videos: [] });
+    categories.push({ name: name.toLowerCase(), videos: [] });
     setCategories(categories);
   };
 
