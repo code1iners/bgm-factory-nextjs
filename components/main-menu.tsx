@@ -26,8 +26,14 @@ const MainMenu = () => {
   } = useForm<MenuAddForm>();
   const { capitalizer } = useString();
 
-  const onAddCategoryClick = () => setCurrentInputMode("CATEGORY");
-  const onAddVideoClick = () => setCurrentInputMode("VIDEO");
+  const onAddCategoryClick = () => {
+    setCurrentInputMode("CATEGORY");
+    setValue("input", "");
+  };
+  const onAddVideoClick = () => {
+    setCurrentInputMode("VIDEO");
+    setValue("input", "");
+  };
   const onInputModalCloseClick = () => setCurrentInputMode("");
   const onCategoryDelete = (category: string) => {
     if (
