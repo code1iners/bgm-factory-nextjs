@@ -25,10 +25,16 @@ const useStorage = () => {
   /**
    * Delete specific category.
    */
-  const deleteCategory = (category: string) => {
-    const categories = getCategories();
-    const filteredCategories = categories.filter((c) => c.name !== category);
-    setCategories(filteredCategories);
+  const deleteCategory = (category: string): boolean => {
+    try {
+      const categories = getCategories();
+      const filteredCategories = categories.filter((c) => c.name !== category);
+      setCategories(filteredCategories);
+      return true;
+    } catch (e) {
+      console.error("[deleteCategory]", e);
+      return false;
+    }
   };
 
   /**

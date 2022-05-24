@@ -34,7 +34,9 @@ const MainMenu = () => {
       confirm(`정말로 '${capitalizer(category)}' 카테고리를 삭제하시겠습니까?`)
     ) {
       // delete category.
-      deleteCategory(category);
+      const ok = deleteCategory(category);
+      if (ok) alert("정상적으로 삭제했습니다.");
+      else alert("해당 카테고리를 삭제하지 못했습니다.");
     }
   };
   const onFormValid = ({ input }: MenuAddForm) => {
