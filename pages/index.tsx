@@ -1,11 +1,48 @@
 import WebLayout from "@/components/layouts/web-layout";
 import type { NextPage } from "next";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Category, GetCategoriesResponse } from "./api/v1/categories";
 
 const Home: NextPage = () => {
-  const [categories, setCategories] = useState(["work", "sleep"]);
+  useEffect(() => {
+    const categories = localStorage.getItem("CATEGORIES");
+    if (categories?.length) {
+      setCategories(JSON.parse(categories));
+    } else {
+      setCategoriesIntoStorage();
+    }
+  }, []);
+
+  /**
+   * Setting categories into local
+   */
+  const setCategoriesIntoStorage = async () => {
+    const categories = await fetchCategories();
+    localStorage.setItem("CATEGORIES", JSON.stringify(categories));
+    setCategories(categories);
+  };
+
+  /**
+   * Fetching categories.
+   */
+  const fetchCategories = async (): Promise<Category[]> => {
+    const { ok, categories, error }: GetCategoriesResponse = await fetch(
+      "api/v1/categories"
+    ).then((res) => res.json());
+    if (ok && categories) {
+      console.log(categories);
+
+      return categories;
+    }
+    if (error) {
+      console.error("[fetchCategories]", error);
+    }
+    return [];
+  };
+
+  const [categories, setCategories] = useState<Category[]>();
 
   const container = {
     hidden: { opacity: 0 },
@@ -39,13 +76,13 @@ const Home: NextPage = () => {
           animate="show"
           className="p-10 grid gap-5 justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
-          {categories.map((category, index) => (
+          {categories?.map((category, index) => (
             <Link
               key={index}
               href={{
                 pathname: "bgm",
                 query: {
-                  category,
+                  category: category.name,
                 },
               }}
             >
@@ -58,7 +95,7 @@ const Home: NextPage = () => {
                   }}
                   className="bgm-category-box"
                 >
-                  {category}
+                  {category.name}
                 </motion.li>
               </a>
             </Link>
