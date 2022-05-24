@@ -1,13 +1,21 @@
-import { clazz } from "libs/clients/clazz";
 import Link from "next/link";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { motion, AnimatePresence } from "framer-motion";
+import { currentInputModeAtom, isMenuOpenedAtom } from "@/libs/clients/atoms";
+import { clazz } from "@/libs/clients/clazz";
 
 interface WebHeaderProps {
   className?: string;
 }
 
 const WebHeader = ({ className }: WebHeaderProps) => {
+  const [isMenuOpened, setIsMenuOpened] = useRecoilState(isMenuOpenedAtom);
+  const setCurrentInputMode = useSetRecoilState(currentInputModeAtom);
+
   const onMenuClick = () => {
-    alert("서비스 준비중입니다.");
+    setIsMenuOpened((prev) => !prev);
+    // Clear current input mode when menu close.
+    if (isMenuOpened) setCurrentInputMode("");
   };
 
   return (
@@ -20,15 +28,26 @@ const WebHeader = ({ className }: WebHeaderProps) => {
       {/* Logo */}
       <Link href="/">
         <a>
-          <span className="tracking-widest text-xl col-start-1 col-end-3 whitespace-nowrap justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110">
+          <span
+            className={clazz(
+              "tracking-widest text-xl col-start-1 col-end-3 whitespace-nowrap justify-self-center cursor-pointer transition hover:text-red-500 hover:scale-110",
+              isMenuOpened ? "text-white" : "text-black"
+            )}
+          >
             BGM Factory
           </span>
         </a>
       </Link>
 
       {/* Menu icon */}
-      <div className="col-start-12 col-end-13 justify-self-center hover:text-red-500 transition-colors">
-        <button className="cursor-pointer" onClick={onMenuClick}>
+      <div className="col-start-12 col-end-13 justify-self-center transition-colors relative flex justify-center items-center">
+        <button
+          className={clazz(
+            "cursor-pointer",
+            isMenuOpened ? "text-white" : "text-black"
+          )}
+          onClick={onMenuClick}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
@@ -44,6 +63,19 @@ const WebHeader = ({ className }: WebHeaderProps) => {
             />
           </svg>
         </button>
+        <AnimatePresence>
+          {isMenuOpened ? (
+            <motion.div
+              initial={{ width: 0, height: 0 }}
+              animate={{ width: "1000vh", height: "1000vh" }}
+              exit={{ width: 0, height: 0 }}
+              transition={{
+                duration: 0.6,
+              }}
+              className="absolute rounded-full -z-10 bg-sexy-black color-white"
+            ></motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     </header>
   );

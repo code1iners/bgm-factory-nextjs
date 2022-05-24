@@ -10,4 +10,8 @@
   .responsive-grid {
     @apply sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
   }
+
+  .main-menu-item {
+    @apply justify-self-center w-full text-center cursor-pointer select-none text-lg tracking-wider;
+  }
 }

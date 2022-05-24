@@ -1,11 +1,15 @@
-import WebLayout from "@/components/layouts/web-layout";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Category, GetCategoriesResponse } from "./api/v1/categories";
+import WebLayout from "@/components/layouts/web-layout";
+import { Category, GetCategoriesResponse } from "@/api/v1/categories";
+import { useRecoilValue } from "recoil";
+import { isMenuOpenedAtom } from "@/libs/clients/atoms";
 
 const Home: NextPage = () => {
+  const isMenuOpened = useRecoilValue(isMenuOpenedAtom);
+
   useEffect(() => {
     const categories = localStorage.getItem("CATEGORIES");
     if (categories?.length) {
@@ -13,7 +17,7 @@ const Home: NextPage = () => {
     } else {
       setCategoriesIntoStorage();
     }
-  }, []);
+  }, [isMenuOpened]);
 
   /**
    * Setting categories into local
@@ -32,8 +36,6 @@ const Home: NextPage = () => {
       "api/v1/categories"
     ).then((res) => res.json());
     if (ok && categories) {
-      console.log(categories);
-
       return categories;
     }
     if (error) {
@@ -69,12 +71,12 @@ const Home: NextPage = () => {
 
   return (
     <WebLayout>
-      <div>
+      <div className="h-full">
         <motion.ul
           variants={container}
           initial="hidden"
           animate="show"
-          className="p-10 grid gap-5 justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          className="h-full p-10 grid gap-5 justify-self-center overflow-y-scroll sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
           {categories?.map((category, index) => (
             <Link

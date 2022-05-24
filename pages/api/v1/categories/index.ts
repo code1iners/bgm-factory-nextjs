@@ -2,7 +2,7 @@ import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 
 export interface Category {
-  name: "work" | "sleep";
+  name: string;
   videos: string[];
 }
 export interface GetCategoriesResponse {
