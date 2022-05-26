@@ -1,6 +1,11 @@
 import { Category } from "@/api/v1/categories";
-
 export const CATEGORIES_KEY = "CATEGORIES";
+
+export interface AddVideoResult {
+  ok: boolean;
+  data?: string;
+  error?: string;
+}
 
 const useStorage = () => {
   /**
@@ -23,6 +28,14 @@ const useStorage = () => {
   };
 
   /**
+   * Getting category by name.
+   * @param {string} name
+   */
+  const getCategoryByName = (name: string): Category | undefined => {
+    return getCategories().find((c) => c.name === name);
+  };
+
+  /**
    * Delete specific category.
    */
   const deleteCategory = (category: string): boolean => {
@@ -40,8 +53,9 @@ const useStorage = () => {
   /**
    * Setting categories (override).
    */
-  const setCategories = (categories: Category[]) =>
+  const setCategories = (categories: Category[]) => {
     localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+  };
 
   const addCategory = (name: string) => {
     const categories = getCategories();
@@ -53,21 +67,41 @@ const useStorage = () => {
   };
 
   const extractVideoId = (videoUrl: string) => {
-    const key = "watch?v=";
-    const startIndex = videoUrl.indexOf(key);
-    const endIndex = videoUrl.indexOf("&ab_channel");
-    const isValid = startIndex !== -1 || endIndex !== -1;
+    // First process.
+    let key = "watch?v=";
+    let startIndex = videoUrl.indexOf(key);
+    let endIndex = videoUrl.indexOf("&ab_channel");
+    let isValid = startIndex !== -1 || endIndex !== -1;
+    if (isValid) return videoUrl.slice(startIndex + key.length, endIndex);
 
-    return isValid ? videoUrl.slice(startIndex + key.length, endIndex) : null;
+    // Second process.
+    key = "https://youtu.be/";
+    isValid = videoUrl.includes(key);
+    if (isValid) return videoUrl.slice(key.length);
+    return null;
   };
 
-  const addVideo = (categoryName: string, videoUrl: string): boolean => {
+  const addVideo = (categoryName: string, videoUrl: string): AddVideoResult => {
     const videoId = extractVideoId(videoUrl);
-    if (!videoId) return false;
+    if (!videoId)
+      return {
+        ok: false,
+        error: "해당 유튜브 영상 주소는 유효하지 않습니다.",
+      };
 
     const categories = getCategories();
+
+    // Check exists.
+    const foundCategory = categories.find((c) => c.name === categoryName);
+    const isExists = foundCategory?.videos.some((v) => v === videoId);
+    if (isExists)
+      return {
+        ok: false,
+        error: "해당 유튜브 영상은 이미 등록되어있습니다.",
+      };
+
     const modifiedCategories = categories.map((c) => {
-      if (c.name === categoryName) {
+      if (c.name.toLowerCase() === categoryName.toLowerCase()) {
         // Remove duplicates.
         c.videos.push(videoId);
         const duplicatesRemovedCategories = Array.from(new Set(c.videos));
@@ -77,17 +111,59 @@ const useStorage = () => {
     });
 
     setCategories(modifiedCategories);
-    return true;
+    return {
+      ok: true,
+      data: videoId,
+    };
+  };
+
+  /**
+   * Getting videos by category name.
+   * @param {string} name
+   */
+  const getVideosByCategoryName = (name: string) => {
+    const category = getCategoryByName(name);
+    return category?.videos || [];
+  };
+
+  /**
+   * Delete video by id.
+   * @param {string} id
+   */
+  const deleteVideoById = (categoryName: string, id: string) => {
+    if (confirm(`정말로 '${id}' 영상을 삭제하시겠습니까?`)) {
+      const category = getCategoryByName(categoryName);
+      if (!category) return false;
+      const filteredCategoryVideos = category.videos.filter(
+        (videoId) => videoId !== id
+      );
+
+      // Update category.
+      const updatedCategories = getCategories().map((category) => {
+        if (category.name === categoryName) {
+          category.videos = [...filteredCategoryVideos];
+        }
+        return category;
+      });
+
+      setCategories(updatedCategories);
+
+      return true;
+    }
+    return false;
   };
 
   return {
     getCategoriesAsString,
     getCategories,
     getCategoryNames,
+    getCategoryByName,
     deleteCategory,
     setCategories,
     addCategory,
     addVideo,
+    getVideosByCategoryName,
+    deleteVideoById,
   };
 };
 

@@ -1,10 +1,14 @@
 import { currentInputModeAtom } from "@/libs/clients/atoms";
+import {
+  categoriesAtom,
+  selectedCategoryAtom,
+  selectedCategoryVideosSelector,
+} from "@/libs/clients/atoms/categories";
 import { clazz } from "@/libs/clients/clazz";
 import useStorage from "@/libs/clients/useStorage";
 import useString from "@/libs/clients/useString";
 import { motion, AnimatePresence } from "framer-motion";
-import { Category } from "pages/api/v1/categories";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -13,11 +17,26 @@ interface MenuAddForm {
 }
 
 const MainMenu = () => {
+  const [categories, setCategories] = useRecoilState(categoriesAtom);
+
+  useEffect(() => {
+    if (!categories.length) {
+      setCategories(getStorageCategories());
+    }
+  }, [categories]);
+  const [selectedCategory, setSelectedCategory] =
+    useRecoilState(selectedCategoryAtom);
+  const selectedCategoryVideos = useRecoilValue(selectedCategoryVideosSelector);
+
   const [currentInputMode, setCurrentInputMode] =
     useRecoilState(currentInputModeAtom);
-  const { getCategoryNames, addCategory, deleteCategory, addVideo } =
-    useStorage();
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>();
+  const {
+    addCategory,
+    deleteCategory,
+    addVideo,
+    setCategories: setStorageCategories,
+    getCategories: getStorageCategories,
+  } = useStorage();
   const {
     register,
     handleSubmit,
@@ -35,14 +54,37 @@ const MainMenu = () => {
     setValue("input", "");
   };
   const onInputModalCloseClick = () => setCurrentInputMode("");
-  const onCategoryDelete = (category: string) => {
+  const onVideoDeleteClick = (videoId: string) => {
+    if (currentInputMode === "VIDEO") {
+      // Delete selected video id.
+      if (confirm(`정말로 '${videoId}' 영상을 삭제하시겠습니까?`)) {
+        setCategories((prev) => {
+          const newCategories = prev.map((c) => {
+            const copied = { ...c };
+            if (copied.name === selectedCategory.name) {
+              copied.videos = [...copied.videos.filter((id) => id !== videoId)];
+            }
+            return copied;
+          });
+
+          // Update database.
+          setStorageCategories(newCategories);
+
+          return newCategories;
+        });
+      }
+    }
+  };
+  const onCategoryDeleteClick = (category: string) => {
     if (
       confirm(`정말로 '${capitalizer(category)}' 카테고리를 삭제하시겠습니까?`)
     ) {
       // delete category.
       const ok = deleteCategory(category);
-      if (ok) alert("정상적으로 삭제했습니다.");
-      else alert("해당 카테고리를 삭제하지 못했습니다.");
+      if (ok) {
+        setCategories((prev) => prev.filter((c) => c.name !== category));
+        alert("정상적으로 삭제했습니다.");
+      } else alert("해당 카테고리를 삭제하지 못했습니다.");
     }
   };
   const onFormValid = ({ input }: MenuAddForm) => {
@@ -50,6 +92,11 @@ const MainMenu = () => {
       case "CATEGORY":
         const addCategoryOk = addCategory(input);
         if (addCategoryOk) {
+          setCategories((prev) => {
+            const isExist = prev.some((c) => c.name === input);
+            if (isExist) return prev;
+            return [...prev, { name: input, videos: [] }];
+          });
           alert("정상적으로 추가했습니다.");
           setValue("input", "");
         } else {
@@ -57,16 +104,29 @@ const MainMenu = () => {
             "카테고리를 추가하는데 실패했습니다.\n이미 존재하는 카테고리가 아닌지 확인해주세요."
           );
         }
+
         break;
 
       case "VIDEO":
-        if (!selectedCategoryName) break;
-        const addVideoOk = addVideo(selectedCategoryName, input);
-        if (addVideoOk) {
+        if (!selectedCategory) break;
+        const { ok, data, error } = addVideo(selectedCategory.name, input);
+
+        if (ok && data) {
           alert("정상적으로 추가되었습니다.");
           setValue("input", "");
+
+          // Update state.
+          setCategories((prev) =>
+            prev.map((c) => {
+              const copied = { ...c };
+              if (copied.name === selectedCategory.name) {
+                copied.videos = [...copied.videos, data];
+              }
+              return copied;
+            })
+          );
         } else {
-          alert("해당 유튜브 영상 주소는 유효하지 않습니다.");
+          alert(error);
         }
         break;
 
@@ -78,34 +138,59 @@ const MainMenu = () => {
         break;
     }
   };
+
+  // Variants
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    show: { y: 0, opacity: 1 },
+  };
+
   return (
     <>
       <div className="relative z-10 border-t border-t-white"></div>
       <article className="relative z-10 text-white h-full">
-        <ul className="grid grid-cols-1 gap-7 p-10">
-          <motion.li
-            onClick={onAddCategoryClick}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{
-              scale: 0.9,
-              color: "#f43f5e",
-            }}
-            className="main-menu-item"
-          >
-            Add Category
-          </motion.li>
-          <motion.li
-            onClick={onAddVideoClick}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{
-              scale: 0.9,
-              color: "#f43f5e",
-            }}
-            className="main-menu-item"
-          >
-            Add Video
-          </motion.li>
-        </ul>
+        <AnimatePresence>
+          <ul className="grid grid-cols-1 gap-7 p-10">
+            <motion.li
+              variants={item}
+              initial="hidden"
+              animate="show"
+              onClick={onAddCategoryClick}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{
+                scale: 0.9,
+                color: "#f43f5e",
+              }}
+              className="main-menu-item"
+            >
+              Edit Category
+            </motion.li>
+            <motion.li
+              variants={item}
+              initial="hidden"
+              animate="show"
+              onClick={onAddVideoClick}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{
+                scale: 0.9,
+                color: "#f43f5e",
+              }}
+              className="main-menu-item"
+            >
+              Edit Video
+            </motion.li>
+          </ul>
+        </AnimatePresence>
 
         <motion.section className="absolute bottom-0 w-full">
           <AnimatePresence>
@@ -155,43 +240,89 @@ const MainMenu = () => {
                 <div className="flex flex-col gap-5 px-5 pt-5 pb-10">
                   {/* Categories start */}
                   <section>
+                    {/* Categories */}
                     <ul className="flex items-center gap-3">
-                      {getCategoryNames().map((categoryName) => (
+                      {categories?.map(({ name, videos }) => (
                         <li
-                          key={categoryName}
+                          key={name}
                           className={clazz(
                             "cursor-pointer hover:scale-110 transition-transform flex items-center",
-                            selectedCategoryName === categoryName.toLowerCase()
+                            selectedCategory?.name === name.toLowerCase()
                               ? "scale-110 font-semibold underline underline-offset-1"
                               : ""
                           )}
-                          onClick={() => setSelectedCategoryName(categoryName)}
+                          onClick={() =>
+                            setSelectedCategory({
+                              name,
+                              videos,
+                            })
+                          }
                         >
-                          <span>{capitalizer(categoryName)}</span>
-                          <button
-                            className="cursor-pointer"
-                            onClick={() => onCategoryDelete(categoryName)}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
+                          <span>{capitalizer(name)}</span>
+                          {currentInputMode === "CATEGORY" ? (
+                            <button
+                              className="cursor-pointer"
+                              onClick={() => onCategoryDeleteClick(name)}
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5 text-white"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          ) : null}
                         </li>
                       ))}
                     </ul>
                   </section>
                   {/* Categories end */}
+
+                  {/* Videos start */}
+                  {selectedCategory && selectedCategoryVideos.length ? (
+                    <section>
+                      <motion.ul
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                        className="flex items-center gap-2 "
+                      >
+                        {selectedCategoryVideos.map((videoId) => (
+                          <motion.li
+                            key={videoId}
+                            variants={item}
+                            whileHover={{
+                              scale: currentInputMode === "VIDEO" ? 1.1 : 1,
+                            }}
+                            whileTap={{
+                              scale: currentInputMode === "VIDEO" ? 0.9 : 1,
+                            }}
+                            className="flex items-center"
+                          >
+                            <span
+                              className={clazz(
+                                currentInputMode === "VIDEO"
+                                  ? "cursor-pointer hover:text-red-500 hover:line-through"
+                                  : "cursor-default"
+                              )}
+                              onClick={() => onVideoDeleteClick(videoId)}
+                            >
+                              {videoId}
+                            </span>
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                    </section>
+                  ) : null}
+                  {/* Videos end */}
 
                   {/* Form */}
                   <form onSubmit={handleSubmit(onFormValid)} className="">
@@ -204,8 +335,8 @@ const MainMenu = () => {
                         type="text"
                         placeholder={
                           currentInputMode === "CATEGORY"
-                            ? "추가하고싶은 '카테고리'를 입력해주세요."
-                            : "추가하고 싶은 '유튜브 영상 주소'를 넣어주세요."
+                            ? "sleep or work"
+                            : "https://youtu.be/something"
                         }
                         autoCapitalize="off"
                         autoComplete="off"

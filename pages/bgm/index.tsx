@@ -1,23 +1,28 @@
 import WebLayout from "@/components/layouts/web-layout";
+import { categoriesAtom } from "@/libs/clients/atoms/categories";
+import useStorage from "@/libs/clients/useStorage";
 import { useRouter } from "next/router";
 import { Category } from "pages/api/v1/categories";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
 const BgmIndex = () => {
   // Getting category from query.
   const {
     query: { category },
   } = useRouter();
-
   const [foundCategory, setFoundCategory] = useState<Category>();
+  const { getCategories } = useStorage();
+  const categories = useRecoilValue(categoriesAtom);
+
   useEffect(() => {
-    const categories = localStorage.getItem("CATEGORIES");
-    if (categories) {
-      const parsedCategories: Category[] = JSON.parse(categories);
-      const foundCategory = parsedCategories.find((c) => c.name === category);
-      setFoundCategory(foundCategory);
-    }
-  }, []);
+    let __categories__ = categories.length ? categories : getCategories();
+    setFoundCategory(
+      __categories__.find(
+        (c) => c.name.toLowerCase() === String(category).toLowerCase()
+      )
+    );
+  }, [categories, category]);
 
   return (
     <WebLayout>
