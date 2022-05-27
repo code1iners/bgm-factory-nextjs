@@ -67,16 +67,8 @@ const useStorage = () => {
   };
 
   const extractVideoId = (videoUrl: string) => {
-    // First process.
-    let key = "watch?v=";
-    let startIndex = videoUrl.indexOf(key);
-    let endIndex = videoUrl.indexOf("&ab_channel");
-    let isValid = startIndex !== -1 || endIndex !== -1;
-    if (isValid) return videoUrl.slice(startIndex + key.length, endIndex);
-
-    // Second process.
-    key = "https://youtu.be/";
-    isValid = videoUrl.includes(key);
+    const key = "https://youtu.be/";
+    const isValid = videoUrl.includes(key);
     if (isValid) return videoUrl.slice(key.length);
     return null;
   };
