@@ -18,4 +18,8 @@
   .main-menu-item {
     @apply justify-self-center w-full text-center cursor-pointer select-none text-lg tracking-wider;
   }
+
+  .error-text {
+    @apply text-red-500 text-sm tracking-wider p-1;
+  }
 }

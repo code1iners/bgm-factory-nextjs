@@ -1,22 +1,30 @@
 import type { NextPage } from "next";
-import Link from "next/link";
-import { motion } from "framer-motion";
 import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import useSWR from "swr";
 import WebLayout from "@/components/layouts/web-layout";
+import { useForm } from "react-hook-form";
 import { GetCategoriesResponse } from "@/api/v1/categories";
-import { useRecoilState } from "recoil";
 import { categoriesAtom } from "@/libs/clients/atoms/categories";
 import useStorage from "@/libs/clients/useStorage";
-import useSWR from "swr";
+import BgmCategoryList from "@/features/bgm/components/bgm-category-list";
+import HorizontalItemAddForm from "@/features/bgm/components/horizontal-item-add-form";
+import { CategoryAddForm } from "@/features/bgm/types";
 
 const Home: NextPage = () => {
   const { data } = useSWR<GetCategoriesResponse>("/api/v1/categories");
-
-  const [categories, setCategories] = useRecoilState(categoriesAtom);
+  const setCategories = useSetRecoilState(categoriesAtom);
   const {
     getCategories: getCategoriesStorage,
     setCategories: setCategoriesStorage,
+    addCategory,
   } = useStorage();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<CategoryAddForm>();
 
   useEffect(() => {
     const stored = getCategoriesStorage();
@@ -37,65 +45,37 @@ const Home: NextPage = () => {
     }
   };
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { y: 200, opacity: 0 },
-    show: { y: 0, opacity: 1 },
-  };
-
-  // bg-gradient-to-r from-[#4e54c8] to-[#8f94fb]
-  const hovering = {
-    scale: 1.1,
-    background:
-      "linear-gradient(90deg, rgba(78,84,200,1) 0%, rgba(143,148,251,1) 100%)",
-    color: "rgba(255, 255, 255)",
+  const onSubmit = ({ categoryName }: CategoryAddForm) => {
+    const ok = addCategory(categoryName);
+    if (ok) {
+      setCategories((prev) => [...prev, { name: categoryName, videos: [] }]);
+      setValue("categoryName", "");
+      alert("Successfully registered.");
+    } else {
+      alert("Category names cannot be duplicated.");
+    }
   };
 
   return (
     <WebLayout>
-      <div className="h-full">
-        <motion.ul
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="basic-grid responsive-grid auto-rows-min"
-        >
-          {categories?.map((category) => (
-            <li className="min-h-[200px]" key={category.name}>
-              <Link
-                href={{
-                  pathname: "bgm",
-                  query: {
-                    category: category.name,
-                  },
-                }}
-              >
-                <motion.a
-                  variants={item}
-                  whileHover={hovering}
-                  whileTap={{
-                    scale: 0.9,
-                  }}
-                  className="rounded-md h-full w-full flex justify-center items-center cursor-pointer shadow-md"
-                >
-                  <span className="select-none text-2xl tracking-wider uppercase">
-                    {category.name}
-                  </span>
-                </motion.a>
-              </Link>
-            </li>
-          ))}
-        </motion.ul>
-      </div>
+      <article className="h-full flex flex-col divide-y">
+        {/* Item add form */}
+        <HorizontalItemAddForm
+          onSubmit={handleSubmit(onSubmit)}
+          register={register("categoryName", {
+            required: "Category name is required.",
+            maxLength: {
+              message: "Category name should be less than 20 digits.",
+              value: 20,
+            },
+          })}
+          placeholder="Enter category name"
+          error={errors.categoryName?.message}
+        />
+
+        {/* Category list */}
+        <BgmCategoryList />
+      </article>
     </WebLayout>
   );
 };
