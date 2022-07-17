@@ -22,14 +22,21 @@ const BgmIndex = () => {
         (c) => c.name.toLowerCase() === String(category).toLowerCase()
       )
     );
-  }, [categories, category]);
+  }, [categories, category, getCategories]);
+
+  /**
+   * Open new youtube window.
+   */
+  const onNewVideoClick = () => {
+    window.open("https://www.youtube.com", "_blank")?.focus();
+  };
 
   return (
     <WebLayout>
-      {foundCategory?.videos ? (
-        <ul className="p-10 grid gap-10 responsive-grid overflow-y-scroll h-full">
+      {foundCategory?.videos.length ? (
+        <ul className="basic-grid responsive-grid">
           {foundCategory?.videos?.map((videoId, index) => (
-            <li className="" key={videoId}>
+            <li key={videoId}>
               <iframe
                 className="w-full aspect-video"
                 src={`https://www.youtube.com/embed/${videoId}?autoplay=${
@@ -44,8 +51,13 @@ const BgmIndex = () => {
           ))}
         </ul>
       ) : (
-        <div className="p-10 flex justify-center">
-          <h1 className="text-2xl tracking-wider">No data</h1>
+        <div className="m-10 h-40 flex justify-center items-center rounded-md border-4 border-dashed hover:border-dashed hover:border-purple-400 transition">
+          <h1
+            className="text-2xl tracking-wider text-gray-400 hover:text-purple-500 cursor-pointer transition-colors"
+            onClick={onNewVideoClick}
+          >
+            Go add new a video.
+          </h1>
         </div>
       )}
     </WebLayout>

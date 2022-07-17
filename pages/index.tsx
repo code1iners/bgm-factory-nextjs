@@ -67,31 +67,32 @@ const Home: NextPage = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="h-full p-10 grid gap-5 justify-self-center overflow-y-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          className="basic-grid responsive-grid auto-rows-min"
         >
-          {categories?.map((category, index) => (
-            <Link
-              key={index}
-              href={{
-                pathname: "bgm",
-                query: {
-                  category: category.name,
-                },
-              }}
-            >
-              <a>
-                <motion.li
+          {categories?.map((category) => (
+            <li className="min-h-[200px]" key={category.name}>
+              <Link
+                href={{
+                  pathname: "bgm",
+                  query: {
+                    category: category.name,
+                  },
+                }}
+              >
+                <motion.a
                   variants={item}
                   whileHover={hovering}
                   whileTap={{
                     scale: 0.9,
                   }}
-                  className="bgm-category-box"
+                  className="rounded-md h-full w-full flex justify-center items-center cursor-pointer shadow-md"
                 >
-                  {category.name}
-                </motion.li>
-              </a>
-            </Link>
+                  <span className="select-none text-2xl tracking-wider uppercase">
+                    {category.name}
+                  </span>
+                </motion.a>
+              </Link>
+            </li>
           ))}
         </motion.ul>
       </div>

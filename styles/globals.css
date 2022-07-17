@@ -7,8 +7,12 @@
     @apply py-16 rounded-md cursor-pointer shadow-lg text-2xl text-center tracking-wider uppercase bg-white;
   }
 
+  .basic-grid {
+    @apply h-full p-10 grid gap-5 justify-self-center overflow-y-auto;
+  }
+
   .responsive-grid {
-    @apply sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+    @apply sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
   }
 
   .main-menu-item {
