@@ -17,6 +17,6 @@ export interface CategoryAddForm {
 
 // Video start.
 export interface VideoAddForm {
-  videoName: string;
+  videoUrl: string;
 }
 // Video end.

@@ -1,4 +1,8 @@
 import { Category } from "@/api/v1/categories";
+import {
+  C_BGM_ERROR_VIDEO_ALREADY_EXIST,
+  C_BGM_ERROR_VIDEO_URL_INVALID,
+} from "@/features/bgm/constants";
 export const CATEGORIES_KEY = "CATEGORIES";
 
 export interface AddVideoResult {
@@ -78,7 +82,7 @@ const useStorage = () => {
     if (!videoId)
       return {
         ok: false,
-        error: "해당 유튜브 영상 주소는 유효하지 않습니다.",
+        error: C_BGM_ERROR_VIDEO_URL_INVALID,
       };
 
     const categories = getCategories();
@@ -89,7 +93,7 @@ const useStorage = () => {
     if (isExists)
       return {
         ok: false,
-        error: "해당 유튜브 영상은 이미 등록되어있습니다.",
+        error: C_BGM_ERROR_VIDEO_ALREADY_EXIST,
       };
 
     const modifiedCategories = categories.map((c) => {
@@ -123,7 +127,7 @@ const useStorage = () => {
    * @param {string} id
    */
   const deleteVideoById = (categoryName: string, id: string) => {
-    if (confirm(`정말로 '${id}' 영상을 삭제하시겠습니까?`)) {
+    try {
       const category = getCategoryByName(categoryName);
       if (!category) return false;
       const filteredCategoryVideos = category.videos.filter(
@@ -139,10 +143,11 @@ const useStorage = () => {
       });
 
       setCategories(updatedCategories);
-
       return true;
+    } catch (error) {
+      console.error("[deleteVideoById]", error);
+      return false;
     }
-    return false;
   };
 
   return {

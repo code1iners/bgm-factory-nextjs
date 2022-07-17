@@ -14,12 +14,12 @@ export default function HorizontalItemAddForm({
         onSubmit={onSubmit}
       >
         <input
-          className="grow px-4 py-2 outline-none"
+          className="grow px-4 py-2 outline-none tracking-wider"
           type="text"
           placeholder={placeholder || "Enter input"}
           {...register}
         />
-        <button className="absolute right-0 p-2 border-l hover:bg-indigo-400 hover:text-white transition-colors">
+        <button className="absolute bg-white right-0 p-2 border-l hover:bg-indigo-400 hover:text-white transition-colors">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"

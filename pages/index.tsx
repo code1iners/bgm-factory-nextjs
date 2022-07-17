@@ -10,6 +10,12 @@ import useStorage from "@/libs/clients/useStorage";
 import BgmCategoryList from "@/features/bgm/components/bgm-category-list";
 import HorizontalItemAddForm from "@/features/bgm/components/horizontal-item-add-form";
 import { CategoryAddForm } from "@/features/bgm/types";
+import {
+  C_BGM_REGISTER_SUCCESS,
+  C_BGM_CATEGORY_FORM_INVALID_DUPLICATE,
+  C_BGM_CATEGORY_FORM_INVALID_REQUIRED,
+  C_BGM_CATEGORY_FORM_INVALID_MAX_LENGTH,
+} from "@/features/bgm/constants";
 
 const Home: NextPage = () => {
   const { data } = useSWR<GetCategoriesResponse>("/api/v1/categories");
@@ -50,9 +56,9 @@ const Home: NextPage = () => {
     if (ok) {
       setCategories((prev) => [...prev, { name: categoryName, videos: [] }]);
       setValue("categoryName", "");
-      alert("Successfully registered.");
+      alert(C_BGM_REGISTER_SUCCESS);
     } else {
-      alert("Category names cannot be duplicated.");
+      alert(C_BGM_CATEGORY_FORM_INVALID_DUPLICATE);
     }
   };
 
@@ -63,9 +69,9 @@ const Home: NextPage = () => {
         <HorizontalItemAddForm
           onSubmit={handleSubmit(onSubmit)}
           register={register("categoryName", {
-            required: "Category name is required.",
+            required: C_BGM_CATEGORY_FORM_INVALID_REQUIRED,
             maxLength: {
-              message: "Category name should be less than 20 digits.",
+              message: C_BGM_CATEGORY_FORM_INVALID_MAX_LENGTH,
               value: 20,
             },
           })}

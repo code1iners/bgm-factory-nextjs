@@ -20,7 +20,8 @@
       "@/libs/*": ["libs/*"],
       "@/api/*": ["pages/api/*"],
       "@/atoms/*": ["libs/clients/atoms/*"],
-      "@/features/*": ["features/*"]
+      "@/features/*": ["features/*"],
+      "@/constants/*": ["constants/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

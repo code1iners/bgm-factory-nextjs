@@ -1,67 +1,97 @@
-import WebLayout from "@/components/layouts/web-layout";
-import { categoriesAtom } from "@/libs/clients/atoms/categories";
-import useStorage from "@/libs/clients/useStorage";
 import { useRouter } from "next/router";
-import { Category } from "pages/api/v1/categories";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useForm } from "react-hook-form";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import WebLayout from "@/components/layouts/web-layout";
+import BgmVideoList from "@/features/bgm/components/bgm-video-list";
+import HorizontalItemAddForm from "@/features/bgm/components/horizontal-item-add-form";
+import { VideoAddForm } from "@/features/bgm/types";
+import {
+  C_BGM_REGISTER_SUCCESS,
+  C_BGM_REMOVE_FAILURE,
+  C_BGM_REMOVE_SUCCESS,
+  C_BGM_REMOVE_CONFIRM_QUESTION,
+} from "@/features/bgm/constants";
+import {
+  categoriesAtom,
+  selectedCategoryAtom,
+} from "@/libs/clients/atoms/categories";
+import useStorage from "@/libs/clients/useStorage";
 
-const BgmIndex = () => {
-  // Getting category from query.
-  const {
-    query: { category },
-  } = useRouter();
-  const [foundCategory, setFoundCategory] = useState<Category>();
-  const { getCategories } = useStorage();
-  const categories = useRecoilValue(categoriesAtom);
+export default function BgmIndex() {
+  const { register, handleSubmit, formState, setValue } =
+    useForm<VideoAddForm>();
+  const { addVideo, deleteCategory } = useStorage();
+  const { query, back } = useRouter();
 
-  useEffect(() => {
-    let __categories__ = categories.length ? categories : getCategories();
-    setFoundCategory(
-      __categories__.find(
-        (c) => c.name.toLowerCase() === String(category).toLowerCase()
-      )
-    );
-  }, [categories, category, getCategories]);
+  const setCategories = useSetRecoilState(categoriesAtom);
+  const selectedCategory = useRecoilValue(selectedCategoryAtom);
 
   /**
-   * Open new youtube window.
+   * Append video with category.
    */
-  const onNewVideoClick = () => {
-    window.open("https://www.youtube.com", "_blank")?.focus();
+  const onSubmit = ({ videoUrl }: VideoAddForm) => {
+    const { ok, data, error } = addVideo(query.category + "", videoUrl);
+    if (ok && data) {
+      alert(C_BGM_REGISTER_SUCCESS);
+      setValue("videoUrl", "");
+
+      // Update state.
+      setCategories((prev) =>
+        prev.map((c) => {
+          const copied = { ...c };
+          if (copied.name === query.category) {
+            copied.videos = [...copied.videos, data];
+          }
+          return copied;
+        })
+      );
+    } else {
+      alert(error);
+    }
+  };
+
+  /**
+   * Delete current category.
+   */
+  const onDeleteClick = () => {
+    if (confirm(C_BGM_REMOVE_CONFIRM_QUESTION)) {
+      const ok = deleteCategory(query.category + "");
+      if (ok) {
+        alert(C_BGM_REMOVE_SUCCESS);
+        back();
+      } else {
+        alert(C_BGM_REMOVE_FAILURE);
+      }
+    }
   };
 
   return (
     <WebLayout>
-      {foundCategory?.videos.length ? (
-        <ul className="basic-grid responsive-grid">
-          {foundCategory?.videos?.map((videoId, index) => (
-            <li key={videoId}>
-              <iframe
-                className="w-full aspect-video"
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=${
-                  index === 0 ? "0" : "0"
-                }&controls=1`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="m-10 h-40 flex justify-center items-center rounded-md border-4 border-dashed hover:border-dashed hover:border-purple-400 transition">
-          <h1
-            className="text-2xl tracking-wider text-gray-400 hover:text-purple-500 cursor-pointer transition-colors"
-            onClick={onNewVideoClick}
-          >
-            Go add new a video.
-          </h1>
-        </div>
-      )}
+      <article className="h-full flex flex-col divide-y">
+        <section className="w-full">
+          {/* Form */}
+          <HorizontalItemAddForm
+            register={register("videoUrl", {
+              required: "Video url is required.",
+            })}
+            onSubmit={handleSubmit(onSubmit)}
+            error={formState.errors.videoUrl?.message}
+            placeholder="Enter youtube video shared URL"
+          />
+
+          <div className="px-10 pb-5 flex justify-center">
+            <button
+              className="text-xs tracking-wider text-gray-400 transition hover:scale-110 hover:text-red-500"
+              onClick={onDeleteClick}
+            >
+              Delete this category
+            </button>
+          </div>
+        </section>
+
+        {/* Video list */}
+        <BgmVideoList />
+      </article>
     </WebLayout>
   );
-};
-
-export default BgmIndex;
+}
