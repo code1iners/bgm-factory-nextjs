@@ -12,8 +12,8 @@ module.exports = {
         "sexy-black": "#2c3e50",
       },
       animation: {
-        "straight-r": "straight-r 0.5s ease-in-out",
-        "rotate-r": "rotate-r 0.5s ease-in-out",
+        "straight-r": "straight-r 0.2s ease-in-out",
+        "rotate-r": "rotate-r 0.2s ease-in-out",
       },
       keyframes: {
         "straight-r": {

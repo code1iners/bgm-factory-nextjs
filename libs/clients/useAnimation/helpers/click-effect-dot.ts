@@ -15,6 +15,7 @@ function createDotContainer({ x, y, degree, size }: CreateDotContainerProps) {
   container.style.height = `${size}px`;
   container.style.transform = `rotate(${degree}deg)`;
   container.style.position = `absolute`;
+  container.style.zIndex = "666";
 
   return container;
 }
@@ -84,7 +85,7 @@ function createTouchEffect({ x, y, degree }: CreateDivProps) {
 
   document.body.appendChild(dotContainer);
 
-  setTimeout(() => dotContainer.remove(), 500);
+  setTimeout(() => dotContainer.remove(), 200);
 }
 
 /**
