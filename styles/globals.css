@@ -16,11 +16,15 @@
   }
 
   .main-menu-item {
-    @apply justify-self-center w-full text-center cursor-pointer select-none text-lg tracking-wider;
+    @apply justify-self-center w-full text-center cursor-pointer select-none text-lg tracking-widest;
   }
 
   .error-text {
     @apply text-red-500 text-sm tracking-wider p-1;
+  }
+
+  .footer-text {
+    @apply tracking-wider text-xs text-gray-500 select-none cursor-pointer transition hover:text-indigo-500 hover:scale-110;
   }
 }
 

@@ -12,6 +12,21 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 
+// Variants
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  show: { y: 0, opacity: 1 },
+};
 interface MenuAddForm {
   input: string;
 }
@@ -139,20 +154,8 @@ const MainMenu = () => {
     }
   };
 
-  // Variants
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { y: 20, opacity: 0 },
-    show: { y: 0, opacity: 1 },
+  const onGithubClick = () => {
+    window.open("https://github.com/code1iners");
   };
 
   return (
@@ -165,29 +168,15 @@ const MainMenu = () => {
               variants={item}
               initial="hidden"
               animate="show"
-              onClick={onAddCategoryClick}
               whileHover={{ scale: 1.1 }}
               whileTap={{
                 scale: 0.9,
                 color: "#f43f5e",
               }}
               className="main-menu-item"
+              onClick={onGithubClick}
             >
-              Edit Category
-            </motion.li>
-            <motion.li
-              variants={item}
-              initial="hidden"
-              animate="show"
-              onClick={onAddVideoClick}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{
-                scale: 0.9,
-                color: "#f43f5e",
-              }}
-              className="main-menu-item"
-            >
-              Edit Video
+              <span>GITHUB</span>
             </motion.li>
           </ul>
         </AnimatePresence>

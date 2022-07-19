@@ -12,5 +12,5 @@ This is a simple sleep helper web application.
 - [x] Weird list item layout.
 - [x] Empty video item box.
 - [x] Mouse click effect.
+- [x] Versioning.
 - [ ] Dark mode.
-- [ ] Versioning.
