@@ -10,6 +10,7 @@ interface WebLayoutProps {
 
 const WebLayout = ({ children }: WebLayoutProps) => {
   const isMenuOpened = useRecoilValue(isMenuOpenedAtom);
+
   return (
     <div className="h-screen relative">
       <WebHeader />

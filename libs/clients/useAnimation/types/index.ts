@@ -1,5 +1,12 @@
 export interface CreateDivProps {
   x: any;
   y: any;
-  d: number;
+  degree: number;
+}
+
+export interface CreateDotContainerProps {
+  x: number;
+  y: number;
+  size: number;
+  degree: number;
 }

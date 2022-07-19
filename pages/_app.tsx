@@ -6,10 +6,15 @@ import { useEffect } from "react";
 import { makeTouchEffect } from "@/libs/clients/useAnimation/helpers";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  /**
+   * Added Mouse click effect.
+   */
   useEffect(() => {
     window.addEventListener("click", makeTouchEffect);
-    return () => window.removeEventListener("click", makeTouchEffect);
-  }, []);
+    return () => {
+      window.removeEventListener("click", makeTouchEffect);
+    };
+  });
 
   return (
     <RecoilRoot>
