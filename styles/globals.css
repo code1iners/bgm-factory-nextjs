@@ -23,7 +23,15 @@
     @apply text-red-500 text-sm tracking-wider p-1;
   }
 
-  .bomb {
-    @apply absolute w-4 h-4 bg-red-500 rounded-full transition z-20;
+  .dot-container {
+    @apply absolute z-20;
+  }
+
+  .dot-wrapper {
+    @apply flex justify-center items-center;
+  }
+
+  .dot {
+    @apply w-[3px] h-[3px] bg-indigo-500 transition;
   }
 }

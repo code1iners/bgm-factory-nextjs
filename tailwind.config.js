@@ -11,33 +11,22 @@ module.exports = {
         "sexy-black": "#2c3e50",
       },
       animation: {
-        "wiggle-45": "wiggle-45 0.5s ease-in-out",
-        "wiggle-90": "wiggle-90 0.5s ease-in-out",
+        "straight-r": "straight-r 0.5s ease-in-out",
+        "rotate-r": "rotate-r 0.5s ease-in-out",
       },
       keyframes: {
-        "wiggle-45": {
+        "straight-r": {
           "0%": {
-            transform: "scale(0.5)",
-          },
-          "70%": {
-            opacity: 0.7,
+            transform: "scale(1)",
           },
           "100%": {
-            transform: "translateX(50px) scale(1)",
-            opacity: 0,
+            opacity: 0.1,
+            transform: "translateX(20px) scale(2)",
           },
         },
-
-        "wiggle-90": {
-          "0%": {
-            transform: "scale(0.5)",
-          },
-          "70%": {
-            opacity: 0.7,
-          },
+        "rotate-r": {
           "100%": {
-            transform: "translateY(50px) scale(1) rotateZ(180deg)",
-            opacity: 0,
+            transform: "rotate(30deg)",
           },
         },
       },

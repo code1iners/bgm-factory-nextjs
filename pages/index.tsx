@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { createElement, useEffect } from "react";
+import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import useSWR from "swr";
 import WebLayout from "@/components/layouts/web-layout";
@@ -16,12 +16,6 @@ import {
   C_BGM_CATEGORY_FORM_INVALID_REQUIRED,
   C_BGM_CATEGORY_FORM_INVALID_MAX_LENGTH,
 } from "@/features/bgm/constants";
-
-interface CreateDivProps {
-  x: any;
-  y: any;
-  d: number;
-}
 
 const Home: NextPage = () => {
   const { data } = useSWR<GetCategoriesResponse>("/api/v1/categories");
@@ -67,42 +61,6 @@ const Home: NextPage = () => {
       alert(C_BGM_CATEGORY_FORM_INVALID_DUPLICATE);
     }
   };
-
-  const createDiv = ({ x, y, d }: CreateDivProps) => {
-    const div = document.createElement("div");
-    div.classList.add("bomb");
-    div.classList.add(`animate-wiggle-${d + ""}`);
-    div.style.left = `${x}px`;
-    div.style.top = `${y}px`;
-    div.style.zIndex = "10";
-    document.body.appendChild(div);
-
-    setTimeout(() => {
-      div.remove();
-    }, 500);
-  };
-
-  const onTouch = (e: MouseEvent) => {
-    console.log(e.clientX, e.clientY);
-
-    createDiv({
-      x: e.clientX,
-      y: e.clientY,
-      d: 45,
-    });
-    createDiv({
-      x: e.clientX,
-      y: e.clientY,
-      d: 90,
-    });
-  };
-
-  useEffect(() => {
-    window.addEventListener("click", onTouch);
-    return () => {
-      window.removeEventListener("click", onTouch);
-    };
-  }, []);
 
   return (
     <WebLayout>
