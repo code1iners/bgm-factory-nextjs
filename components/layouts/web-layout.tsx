@@ -1,9 +1,9 @@
 import React from "react";
-import WebHeader from "@/components/web-header";
 import { useRecoilValue } from "recoil";
+import packageConfig from "@/root/package.json";
+import WebHeader from "@/components/web-header";
+import MainMenu from "@/components/main-menu";
 import { isMenuOpenedAtom } from "@/libs/clients/atoms";
-import MainMenu from "../main-menu";
-import { version } from "@/root/package.json";
 
 interface WebLayoutProps {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const WebLayout = ({ children }: WebLayoutProps) => {
             <div className="grow">{children}</div>
             <footer className="px-10 py-5 flex flex-col justify-center items-center gap-2">
               <span className="footer-text">Codeliners</span>
-              <span className="footer-text">v{version}</span>
+              <span className="footer-text">v{packageConfig.version}</span>
             </footer>
           </div>
         )}

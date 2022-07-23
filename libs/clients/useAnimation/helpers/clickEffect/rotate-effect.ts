@@ -1,6 +1,8 @@
 import {
   CreateDivProps,
   CreateDotContainerProps,
+  CreateDotWrapperProps,
+  CreateDotProps,
 } from "@/libs/clients/useAnimation/types";
 
 /**
@@ -16,27 +18,19 @@ function createDotContainer({ x, y, degree, size }: CreateDotContainerProps) {
   container.style.transform = `rotate(${degree}deg)`;
   container.style.position = `absolute`;
   container.style.zIndex = "666";
-
   return container;
 }
 
 /**
  * Create dot wrapper element.
  */
-function createDotWrapper({
-  size,
-  parent,
-}: {
-  size: number;
-  parent: HTMLDivElement;
-}) {
+function createDotWrapper({ size, parent }: CreateDotWrapperProps) {
   const wrapper = document.createElement("div");
   wrapper.style.width = `${size}px`;
   wrapper.style.height = `${size}px`;
   wrapper.style.display = "flex";
   wrapper.style.justifyContent = "center";
   wrapper.style.alignItems = "center";
-  wrapper.classList.add("dot-wrapper");
   wrapper.classList.add("animate-rotate-r");
   parent.appendChild(wrapper);
   return wrapper;
@@ -45,16 +39,18 @@ function createDotWrapper({
 /**
  * Create dot element.
  */
-function createDot({ parent }: { parent: HTMLDivElement }) {
+function createDot({
+  parent,
+  dotColor = "rgb(99 102 241 / 1)",
+}: CreateDotProps) {
   const dot = document.createElement("div");
   dot.style.width = "3px";
   dot.style.height = "3px";
-  dot.style.backgroundColor = "rgb(99 102 241 / 1)";
+  dot.style.backgroundColor = dotColor;
   dot.style.transitionProperty =
     "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter";
   dot.style.transitionTimingFunction = "cubic-bezier(0.4, 0, 0.2, 1)";
   dot.style.transitionDuration = "150ms";
-  dot.classList.add("dot");
   dot.classList.add("animate-straight-r");
   parent.appendChild(dot);
   return dot;
@@ -83,19 +79,22 @@ function createTouchEffect({ x, y, degree }: CreateDivProps) {
   // Create dot.
   createDot({ parent: dotWrapper });
 
+  // Append dot container into body.
   document.body.appendChild(dotContainer);
 
+  // Remove dot.
   setTimeout(() => dotContainer.remove(), 200);
 }
 
 /**
  * Make touch animation effect.
  */
-function makeTouchEffect({ clientX: x, clientY: y }: MouseEvent) {
+export default function makeRotateEffect({
+  clientX: x,
+  clientY: y,
+}: MouseEvent) {
   const degreeList = [90, 180, 270, 360];
   degreeList.forEach((degree) => {
     createTouchEffect({ x, y, degree });
   });
 }
-
-export default makeTouchEffect;

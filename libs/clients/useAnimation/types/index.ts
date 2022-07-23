@@ -10,3 +10,12 @@ export interface CreateDotContainerProps {
   size: number;
   degree: number;
 }
+export interface CreateDotWrapperProps {
+  size: number;
+  parent: HTMLDivElement;
+}
+
+export interface CreateDotProps {
+  dotColor?: string;
+  parent: HTMLDivElement;
+}

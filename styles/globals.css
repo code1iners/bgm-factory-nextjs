@@ -31,3 +31,31 @@
 body {
   overflow: hidden;
 }
+
+/* Mouse click effect rotate start */
+.animate-straight-r {
+  animation: straight-r 0.2s ease-in-out forwards;
+}
+
+@keyframes straight-r {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.05;
+    transform: translateX(20px) scale(2);
+  }
+}
+/* Mouse click effect rotate end */
+
+/* Mouse click effect rotate start */
+.animate-rotate-r {
+  animation: rotate-r 0.2s ease-in-out forwards;
+}
+
+@keyframes rotate-r {
+  100% {
+    transform: rotate(30deg);
+  }
+}
+/* Mouse click effect rotate start */
