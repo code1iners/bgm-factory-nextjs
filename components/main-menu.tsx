@@ -4,7 +4,7 @@ import {
   selectedCategoryAtom,
   selectedCategoryVideosSelector,
 } from "@/libs/clients/atoms/categories";
-import { clazz } from "@/libs/clients/clazz";
+import { clazz } from "@ce1pers/use-class";
 import useStorage from "@/libs/clients/useStorage";
 import useString from "@/libs/clients/useString";
 import { motion, AnimatePresence } from "framer-motion";

@@ -1,4 +1,4 @@
-import packageConfig from "@/root/package.json";
+import packageConfig from "@/package.json";
 
 export default function WebFooter() {
   return (

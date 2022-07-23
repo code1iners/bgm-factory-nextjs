@@ -9,6 +9,7 @@ import {
   C_BGM_REMOVE_FAILURE,
   C_BGM_REMOVE_SUCCESS,
 } from "@/features/bgm/constants";
+import { openYoutube } from "@/utils/route-utils";
 
 export default function BgmVideoList() {
   // Getting category from query.
@@ -27,13 +28,6 @@ export default function BgmVideoList() {
       )
     );
   }, [categories, category]);
-
-  /**
-   * Open new youtube window.
-   */
-  const onNewVideoClick = () => {
-    window.open("https://www.youtube.com", "_blank")?.focus();
-  };
 
   /**
    * Remove video by id.
@@ -104,7 +98,7 @@ export default function BgmVideoList() {
       {/* m-10 h-40 flex justify-center items-center rounded-md border-4 border-dashed hover:border-dashed hover:border-purple-400 transition */}
       <h1
         className="rounded-md border-4 border-dashed hover:border-purple-400 p-10 text-2xl tracking-wider text-gray-400 hover:text-purple-500 cursor-pointer transition-colors text-center"
-        onClick={onNewVideoClick}
+        onClick={() => openYoutube(category + "")}
       >
         Go add new a video.
       </h1>
