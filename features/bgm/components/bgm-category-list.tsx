@@ -18,12 +18,8 @@ const item = {
   show: { y: 0, opacity: 1 },
 };
 
-// bg-gradient-to-r from-[#4e54c8] to-[#8f94fb]
 const hovering = {
   scale: 1.1,
-  background:
-    "linear-gradient(90deg, rgba(78,84,200,1) 0%, rgba(143,148,251,1) 100%)",
-  color: "rgba(255, 255, 255)",
 };
 
 export default function BgmCategoryList() {
@@ -51,7 +47,7 @@ export default function BgmCategoryList() {
               whileTap={{
                 scale: 0.9,
               }}
-              className="rounded-md h-full w-full flex justify-center items-center cursor-pointer shadow-md"
+              className="rounded-md h-full w-full flex justify-center items-center cursor-pointer shadow-md hover:bg-indigo-500 hover:text-white"
             >
               <span className="select-none text-2xl tracking-wider uppercase">
                 {category.name}
