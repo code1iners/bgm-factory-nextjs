@@ -47,7 +47,7 @@ export default function BgmCategoryList() {
               whileTap={{
                 scale: 0.9,
               }}
-              className="rounded-md h-full w-full flex justify-center items-center cursor-pointer shadow-md hover:bg-indigo-500 hover:text-white"
+              className="rounded-md h-full w-full flex justify-center items-center cursor-pointer shadow-md bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-300 hover:text-white"
             >
               <span className="select-none text-2xl tracking-wider uppercase">
                 {category.name}
