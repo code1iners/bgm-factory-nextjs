@@ -2,11 +2,26 @@ import { useRecoilState } from "recoil";
 import { motion } from "framer-motion";
 import { isDarkAtom } from "@/stores/configs/darkMode";
 import { clazz } from "@ce1pers/use-class";
+import { useEffect } from "react";
+
+const IS_DARK = "IS_DARK";
 
 export default function DarkModeButton() {
   const [isDark, setIsDark] = useRecoilState(isDarkAtom);
 
-  const toggleDark = () => setIsDark((prev) => !prev);
+  /**
+   * Init is dark or light.
+   */
+  useEffect(() => {
+    const isStoredDark = localStorage.getItem(IS_DARK);
+    if (isStoredDark !== null) setIsDark(isStoredDark === "true");
+  }, [setIsDark]);
+
+  const toggleDark = () =>
+    setIsDark((prev) => {
+      localStorage.setItem(IS_DARK, !prev + "");
+      return !prev;
+    });
 
   return (
     <div
