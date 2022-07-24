@@ -98,7 +98,7 @@ export default function BgmVideoList() {
       {/* m-10 h-40 flex justify-center items-center rounded-md border-4 border-dashed hover:border-dashed hover:border-purple-400 transition */}
       <h1
         className="rounded-md border-4 border-dashed hover:border-purple-400 p-10 text-2xl tracking-wider text-gray-400 hover:text-purple-500 cursor-pointer transition-colors text-center"
-        onClick={() => openYoutube(category + "")}
+        onClick={() => openYoutube(category)}
       >
         Go add new a video.
       </h1>

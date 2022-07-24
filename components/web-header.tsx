@@ -46,7 +46,7 @@ const WebHeader = ({ className }: WebHeaderProps) => {
               }}
               whileTap={{ scale: 0.9, color: "rgb(79 70 229)" }}
               className="cursor-pointer inline-block text-gray-500"
-              onClick={() => openYoutube(query.category + "")}
+              onClick={() => openYoutube(query.category)}
             >
               Youtube
             </motion.a>
