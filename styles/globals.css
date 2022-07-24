@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  .bgm-category-box {
-    @apply py-16 rounded-md cursor-pointer shadow-lg text-2xl text-center tracking-wider uppercase bg-white;
-  }
-
   .basic-grid {
     @apply p-10 grid gap-5 justify-self-center overflow-y-auto;
   }
@@ -24,7 +20,11 @@
   }
 
   .footer-text {
-    @apply tracking-wider text-xs text-gray-500 select-none cursor-pointer transition hover:text-indigo-500 hover:scale-110;
+    @apply tracking-wider text-xs select-none cursor-pointer transition hover:text-indigo-500 hover:scale-110 opacity-40;
+  }
+
+  .darker {
+    @apply bg-white text-black dark:bg-slate-700 dark:text-white;
   }
 }
 

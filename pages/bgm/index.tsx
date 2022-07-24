@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import WebLayout from "@/components/layouts/web-layout";
+import WebLayout from "@/layouts/web-layout";
 import BgmVideoList from "@/features/bgm/components/bgm-video-list";
 import HorizontalItemAddForm from "@/features/bgm/components/horizontal-item-add-form";
 import { VideoAddForm } from "@/features/bgm/types";

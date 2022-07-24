@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import WebHeader from "@/components/web-header";
-import MainMenu from "@/components/main-menu";
+import WebHeader from "@/layouts/web-header";
+import MainMenu from "@/layouts/main-menu";
 import { isMenuOpenedAtom } from "@/libs/clients/atoms";
-import WebFooter from "./web-footer";
+import WebFooter from "@/layouts/web-footer";
+import { isDarkAtom } from "@/stores/configs/darkMode";
 
 interface WebLayoutProps {
   children: React.ReactNode;
@@ -12,8 +13,13 @@ interface WebLayoutProps {
 const WebLayout = ({ children }: WebLayoutProps) => {
   const isMenuOpened = useRecoilValue(isMenuOpenedAtom);
 
+  const isDark = useRecoilValue(isDarkAtom);
+  useEffect(() => {
+    document.body.classList.toggle("dark", isDark);
+  }, [isDark]);
+
   return (
-    <div className="h-screen relative">
+    <div className="h-screen relative darker">
       <WebHeader />
       <main className="relative h-[calc(100%-70px)] overflow-hidden">
         {isMenuOpened ? (

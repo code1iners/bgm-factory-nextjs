@@ -53,7 +53,7 @@ export default function BgmVideoList() {
       {foundCategory?.videos?.map((videoId, index) => (
         <li
           key={videoId}
-          className="border border-gray-300 rounded-md shadow-md "
+          className="border rounded-md shadow-md overflow-hidden"
         >
           <div>
             <iframe
@@ -69,7 +69,7 @@ export default function BgmVideoList() {
           </div>
 
           {/* Delete */}
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center border-t">
             <button
               className="w-full py-3 flex justify-center text-gray-400 hover:text-red-500 hover:scale-110 transition"
               onClick={() => onRemoveClick(videoId)}
@@ -95,7 +95,6 @@ export default function BgmVideoList() {
     </ul>
   ) : (
     <div className="p-10">
-      {/* m-10 h-40 flex justify-center items-center rounded-md border-4 border-dashed hover:border-dashed hover:border-purple-400 transition */}
       <h1
         className="rounded-md border-4 border-dashed hover:border-purple-400 p-10 text-2xl tracking-wider text-gray-400 hover:text-purple-500 cursor-pointer transition-colors text-center"
         onClick={() => openYoutube(category)}

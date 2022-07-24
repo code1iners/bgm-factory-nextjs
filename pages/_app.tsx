@@ -1,8 +1,8 @@
-import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import { RecoilRoot } from "recoil";
 import { useEffect } from "react";
+import "@/styles/globals.css";
 import makeRotateEffect from "@/libs/clients/useAnimation/helpers/clickEffect/rotate-effect";
 
 function MyApp({ Component, pageProps }: AppProps) {

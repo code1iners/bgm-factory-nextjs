@@ -1,10 +1,12 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { motion, AnimatePresence } from "framer-motion";
 import { clazz } from "@ce1pers/use-class";
 import { isMenuOpenedAtom } from "@/libs/clients/atoms";
+import { isDarkAtom } from "@/stores/configs/darkMode";
 
-export default function HeaderMenu() {
+export default function HeaderMenuButton() {
   const [isMenuOpened, setIsMenuOpened] = useRecoilState(isMenuOpenedAtom);
+  const isDark = useRecoilValue(isDarkAtom);
 
   const onMenuClick = () => {
     setIsMenuOpened((prev) => !prev);
@@ -15,7 +17,7 @@ export default function HeaderMenu() {
       <button
         className={clazz(
           "cursor-pointer",
-          isMenuOpened ? "text-white" : "text-black"
+          isMenuOpened || isDark ? "text-white" : "text-black"
         )}
         onClick={onMenuClick}
       >

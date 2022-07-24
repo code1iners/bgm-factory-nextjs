@@ -2,11 +2,8 @@ import type { NextPage } from "next";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import useSWR from "swr";
-import WebLayout from "@/components/layouts/web-layout";
 import { useForm } from "react-hook-form";
 import { GetCategoriesResponse } from "@/api/v1/categories";
-import { categoriesAtom } from "@/libs/clients/atoms/categories";
-import useStorage from "@/libs/clients/useStorage";
 import BgmCategoryList from "@/features/bgm/components/bgm-category-list";
 import HorizontalItemAddForm from "@/features/bgm/components/horizontal-item-add-form";
 import { CategoryAddForm } from "@/features/bgm/types";
@@ -16,6 +13,9 @@ import {
   C_BGM_CATEGORY_FORM_INVALID_REQUIRED,
   C_BGM_CATEGORY_FORM_INVALID_MAX_LENGTH,
 } from "@/features/bgm/constants";
+import WebLayout from "@/layouts/web-layout";
+import { categoriesAtom } from "@/libs/clients/atoms/categories";
+import useStorage from "@/libs/clients/useStorage";
 
 const Home: NextPage = () => {
   const { data } = useSWR<GetCategoriesResponse>("/api/v1/categories");
