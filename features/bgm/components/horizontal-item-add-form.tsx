@@ -17,6 +17,7 @@ export default function HorizontalItemAddForm({
           className="grow px-4 py-2 outline-none tracking-wider"
           type="text"
           placeholder={placeholder || "Enter input"}
+          autoComplete="off"
           {...register}
         />
         <button className="absolute right-0 p-2 border-l text-sexy-black hover:bg-indigo-400 hover:text-white transition-colors">
