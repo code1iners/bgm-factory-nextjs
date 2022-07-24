@@ -1,7 +1,14 @@
-export interface CreateDivProps {
+export interface MakeRotateEffectProps {
+  x: number;
+  y: number;
+  dotColor?: string;
+}
+
+export interface CreateTouchEffectProps {
   x: any;
   y: any;
   degree: number;
+  dotColor?: string;
 }
 
 export interface CreateDotContainerProps {

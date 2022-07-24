@@ -1,8 +1,9 @@
 import {
-  CreateDivProps,
+  CreateTouchEffectProps,
   CreateDotContainerProps,
   CreateDotWrapperProps,
   CreateDotProps,
+  MakeRotateEffectProps,
 } from "@/libs/clients/useAnimation/types";
 
 /**
@@ -39,10 +40,7 @@ function createDotWrapper({ size, parent }: CreateDotWrapperProps) {
 /**
  * Create dot element.
  */
-function createDot({
-  parent,
-  dotColor = "rgb(99 102 241 / 1)",
-}: CreateDotProps) {
+function createDot({ parent, dotColor = "red" }: CreateDotProps) {
   const dot = document.createElement("div");
   dot.style.width = "3px";
   dot.style.height = "3px";
@@ -59,7 +57,7 @@ function createDot({
 /**
  * Create single touch effect.
  */
-function createTouchEffect({ x, y, degree }: CreateDivProps) {
+function createTouchEffect({ x, y, degree, dotColor }: CreateTouchEffectProps) {
   const containerSize = 80;
 
   // Create dot container.
@@ -77,7 +75,7 @@ function createTouchEffect({ x, y, degree }: CreateDivProps) {
   });
 
   // Create dot.
-  createDot({ parent: dotWrapper });
+  createDot({ parent: dotWrapper, dotColor });
 
   // Append dot container into body.
   document.body.appendChild(dotContainer);
@@ -90,11 +88,12 @@ function createTouchEffect({ x, y, degree }: CreateDivProps) {
  * Make touch animation effect.
  */
 export default function makeRotateEffect({
-  clientX: x,
-  clientY: y,
-}: MouseEvent) {
+  x,
+  y,
+  dotColor,
+}: MakeRotateEffectProps) {
   const degreeList = [90, 180, 270, 360];
   degreeList.forEach((degree) => {
-    createTouchEffect({ x, y, degree });
+    createTouchEffect({ x, y, degree, dotColor });
   });
 }
