@@ -1,10 +1,7 @@
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
-import { RecoilRoot, useRecoilValue } from "recoil";
-import { useEffect } from "react";
-import "@/styles/globals.css";
-import makeRotateEffect from "@/libs/clients/useAnimation/helpers/clickEffect/rotate-effect";
-import { isDarkAtom } from "@/stores/configs/darkMode";
+import { RecoilRoot } from "recoil";
+import "@/assets/styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

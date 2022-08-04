@@ -1,6 +1,6 @@
 {
   "name": "bgm-factory",
-  "version": "1.12.9",
+  "version": "1.13.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ce1pers/use-animation": "^1.0.0",
     "@ce1pers/use-class": "^1.0.5",
     "framer-motion": "^6.3.3",
     "next": "12.1.6",

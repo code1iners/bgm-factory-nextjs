@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useRecoilValue } from "recoil";
+import { makeRotateEffect } from "@ce1pers/use-animation";
 import WebHeader from "@/layouts/web-header";
 import MainMenu from "@/layouts/main-menu";
 import { isMenuOpenedAtom } from "@/libs/clients/atoms";
 import WebFooter from "@/layouts/web-footer";
 import { isDarkAtom } from "@/stores/configs/darkMode";
-import makeRotateEffect from "@/libs/clients/useAnimation/helpers/clickEffect/rotate-effect";
 
 interface WebLayoutProps {
   children: React.ReactNode;
