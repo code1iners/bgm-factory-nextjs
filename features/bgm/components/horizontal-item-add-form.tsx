@@ -14,7 +14,7 @@ export default function HorizontalItemAddForm({
         onSubmit={onSubmit}
       >
         <input
-          className="grow px-4 py-2 outline-none tracking-wider"
+          className="grow px-4 py-2 outline-none tracking-wider dark:bg-sexy-black"
           type="text"
           placeholder={placeholder || "Enter input"}
           autoComplete="off"
