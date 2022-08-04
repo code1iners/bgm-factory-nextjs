@@ -20,7 +20,7 @@ export default function HorizontalItemAddForm({
           autoComplete="off"
           {...register}
         />
-        <button className="absolute right-0 p-2 border-l text-sexy-black hover:bg-indigo-400 hover:text-white transition-colors">
+        <button className="absolute right-0 p-2 border-l hover:bg-indigo-400 hover:text-white transition-colors">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
