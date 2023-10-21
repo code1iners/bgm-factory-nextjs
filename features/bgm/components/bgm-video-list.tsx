@@ -24,8 +24,8 @@ export default function BgmVideoList() {
     let __categories__ = categories.length ? categories : getCategories();
     setFoundCategory(
       __categories__.find(
-        (c) => c.name.toLowerCase() === String(category).toLowerCase()
-      )
+        (c) => c.name.toLowerCase() === String(category).toLowerCase(),
+      ),
     );
   }, [categories, category]);
 
@@ -63,7 +63,7 @@ export default function BgmVideoList() {
               }&controls=1`}
               title="YouTube video player"
               frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>
           </div>
