@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
+
 import useStorage from "@/libs/clients/useStorage";
 import { categoriesAtom } from "@/libs/clients/atoms/categories";
 import { Category } from "@/api/v1/categories";

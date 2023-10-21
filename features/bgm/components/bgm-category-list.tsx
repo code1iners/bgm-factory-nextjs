@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRecoilValue } from "recoil";
+
 import { categoriesAtom } from "@/libs/clients/atoms/categories";
 
 const container = {
